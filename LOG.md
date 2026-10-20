@@ -12,3 +12,22 @@ ________________________________________________________________
 - "yes" commnad -> The waiting prompt in terminal expired and when I typed "yes" I give a command to the termal (which print "y" on new line until the user stop it) instead to respond to the waiting prompt.
 - host-key prompt -> I have to manually confirm the host-key by typing "yes" or by copying the fingerprint directly from GitHub documentation. Hostkey != userkey
 - VS Code repo -> As I guessed, the correct repo for a project is on the dedicated storage for that specific OS. It is not an option to have the project on the HDD where both OS have access due to many complications and incompatibilities. 
+
+________________________________________________________________
+
+##20.10.2026
+
+#Tasks:
+Task 1: Completed the remaining parts -> Create a new branch; Write LOG.md; Commit it;
+Task 2: Create a new env and install the newest version of python in the local env (3.12.15)) instead using the OS interpreter (3.12)
+Task 3: Install dependencies (normal + dev)
+
+#Time: 
+Task 1: 25 mins
+Task 2: 10 mins
+Task 3: 10 mins
+
+Total: 35 mins
+
+#Snags:
+
