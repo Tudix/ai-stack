@@ -1,7 +1,7 @@
 [project]
 name = "ai-stack"
 version = "0.1.0"
-description = "Add your description here"
+description = "A self-hosted AI stack. Its first component is an OpenAI-compatible gateway that routes each request to a local model or a cloud API and records tokens, latency and cost per request."
 readme = "README.md"
 authors = [
     { name = "Tudix", email = "101678482+Tudix@users.noreply.github.com" }
@@ -12,9 +12,6 @@ dependencies = [
     "pydantic>=2.14.1",
     "uvicorn>=0.54.0",
 ]
-
-[project.scripts]
-ai-stack = "ai_stack:main"
 
 [build-system]
 requires = ["uv_build>=0.13.1,<0.14.0"]
