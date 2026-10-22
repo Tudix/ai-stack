@@ -55,3 +55,24 @@ Total: 85 min (planned: 60)
 - Read "untracked" in `git status` as "don't commit". Untracked means Git has never seen the file; only `.gitignore` means "never commit".
 - The README claimed uv always downloads Python 3.12. That was wrong (see the first snag). I caught it by checking the claim against what happened on my machine.
 - `.venv` (this project's packages) ≠ `.env` (secrets, never committed). The managed Python lives in `~/.local/share/uv/python/`; `.venv` only links to it.
+
+---
+
+# 2026-10-21
+
+## Steps
+- Removed the uv init demo code (`[projects.scripts]` + `main()`), set the pyproject description.
+- Split the work into two commits (code vs log) with imperative messages.
+- Fresh-clone check passed: `uv sync` + `import ai_stack`, exit code 0.
+- Opened the PR "Set up project scaffolding with uv" (description + test line), squash-merged with a cleaned message, deleted the branch.
+
+## Time
+~60 min
+
+## Learned
+- package = what a thing is; dependency = role it plays for my project.
+- Editable install: code changes in `src/` apply immediately; `pyproject.toml` changes need a reinstall (`uv sync` showed `~ ai-stack`).
+- `echo $?` shows the last command's exit code; 0 = success.
+
+## Snags
+- `/tmp` is a temporary folder which is deleted on reboot
