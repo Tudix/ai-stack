@@ -119,3 +119,45 @@ Answer: Route on measured quality. Options from cheap to expensive: rules → a 
 - `ollama run gemma4:e4b --verbose` → record the eval rate (tokens/sec).
 - curl to `/v1/chat/completions` → save the raw response to `tests/fixtures/ollama_chat_response.json`.
 - Reading session 2: Monitoring and Observability.
+
+---
+
+# 2026-10-23
+
+## Steps
+- VRAM footprint: card1 1 GB unloaded vs 6.1 GB loaded → `gemma4:e4b` ≈ (6.1 − X) GB.
+- Speed baseline (`ollama run gemma4:e4b --verbose`, 2 runs):
+  - Generation: ~122–127 tokens/s, stable across runs.
+  - Prompt processing: 221 tokens/s at a 24-token prompt, ~1,127 tokens/s at 1,105 tokens.
+  - Load duration < 1 ms both times: `ollama run` loads the model when the session starts.
+- Saved a real response with curl to `tests/fixtures/ollama_chat_response.json`; `json.tool` confirms valid JSON.
+- Reading session 2: Ch. 10, Monitoring and Observability (plus the sections before it).
+
+## Time
+- Reading: 35 min
+- VRAM, speed, fixture, notes: 50 min
+
+Total: 85 min (planned: 60)
+
+## Learned
+- A chat re-sends the whole conversation with every message: the second prompt was 1,105 tokens for a short question. The model is stateless; the client sends the history.
+- Two different speeds: the prompt is processed in parallel (fast), the answer is generated one token at a time (slower). Tiny prompts give misleading prompt speeds.
+- Fixture: standard OpenAI format, no non-standard fields. Beyond the minimal model: `system_fingerprint`, `usage.prompt_tokens_details.cached_tokens`. Task 3's response model must read this file unchanged, so the extra-fields decision applies to responses too.
+- "Say hello in one sentence." = 22 prompt tokens: each message carries formatting tokens, and they're billed.
+
+## Reading: Ch. 10, Monitoring and Observability
+- MTTD (mean time to detection), MTTR (mean time to respond), CFR (change failure rate)
+- Metrics depend on the app (e.g. how often do users stop a generation halfway?; What's the average number of tokens per input? What's the average number of tokens per output?)
+- Monitoring tells me *that* something went wrong; observability means the system records enough to work out *why* from its outputs. ("Observability" became popular in the mid-2010s.)
+- Logs are essential for debugging (model, tokens, finish_reason, latency…). But logging full prompts/responses has privacy costs: M1 logs metadata, not content.
+
+Question: Should observability be planned before building? Could an AI model later watch the observability data and fix problems (with my approval), so the app maintains or grows itself?
+Answer: Decide up front what's needed to debug one failed request, and record that from day one (e.g., a request ID in every log line); improve it as failures teach me. An AI that maintains the system is possible later: it depends on good observability, should earn trust in stages (diagnose → propose fixes as PRs → low-risk actions), and never ships unreviewed changes.
+
+## Snags
+- `ollama run`: the model loads when the session starts, not with the first question.
+- `uv run` rebuilt ai-stack after a branch switch: Git rewrote `pyproject.toml`, and uv reinstalled the project. Harmless.
+
+
+## Later ideas
+- An AI agent that reads observability data and proposes fixes as PRs (needs M1 logging first).
